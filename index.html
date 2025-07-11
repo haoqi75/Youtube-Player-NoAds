@@ -3,27 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>无广告 YouTube 播放器</title>
+    <title>PureTube - 无广告 YouTube 播放器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>无广告 YouTube 播放器</h1>
-        
-        <div class="search-container">
-            <input type="text" id="videoUrl" placeholder="输入 YouTube 视频链接或ID">
-            <button id="playBtn">播放</button>
-        </div>
-        
-        <div class="video-container">
-            <div id="player"></div>
-        </div>
-        
-        <div class="controls">
-            <button id="fullscreenBtn">全屏</button>
-            <input type="range" id="volumeSlider" min="0" max="100" value="50">
-            <button id="muteBtn">静音</button>
-        </div>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <i class="fab fa-youtube"></i>
+                <span>PureTube</span>
+            </div>
+            <div class="tagline">无广告 · 纯净播放体验</div>
+        </header>
+
+        <main class="main-content">
+            <div class="search-card">
+                <div class="search-box">
+                    <input type="text" id="videoUrl" placeholder="粘贴 YouTube 链接或视频ID...">
+                    <button id="playBtn" class="glass-btn">
+                        <i class="fas fa-play"></i> 立即播放
+                    </button>
+                </div>
+                <div class="examples">
+                    <span>示例格式:</span>
+                    <code>https://youtu.be/dQw4w9WgXcQ</code>
+                    <code>dQw4w9WgXcQ</code>
+                </div>
+            </div>
+
+            <div class="video-container" id="player-container">
+                <div id="player"></div>
+                <div class="placeholder">
+                    <i class="fab fa-youtube"></i>
+                    <p>等待播放视频...</p>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="fullscreenBtn" class="control-btn">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <div class="volume-control">
+                    <button id="muteBtn" class="control-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                </div>
+                <div class="video-info" id="videoInfo">
+                    <i class="fas fa-info-circle"></i> 未加载视频
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>© 2023 PureTube | 无广告 YouTube 播放体验</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
