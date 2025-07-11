@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无广告 YouTube 播放器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>无广告 YouTube 播放器</h1>
+        
+        <div class="search-container">
+            <input type="text" id="videoUrl" placeholder="输入 YouTube 视频链接或ID">
+            <button id="playBtn">播放</button>
+        </div>
+        
+        <div class="video-container">
+            <div id="player"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="fullscreenBtn">全屏</button>
+            <input type="range" id="volumeSlider" min="0" max="100" value="50">
+            <button id="muteBtn">静音</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
