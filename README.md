@@ -44,7 +44,7 @@
 
 ## 截图预览
 
-![播放器界面截图](screenshot.png)
+![播放器界面截图](screenshot.jpg)
 
 ## 许可证
 
