@@ -1,6 +1,6 @@
 # 🎥 PureTube - 优雅的无广告 YouTube 播放器  
 
-![PureTube 界面展示](https://via.placeholder.com/800x500/1a1a1a/ffffff?text=PureTube+Player+Preview)  
+![PureTube 界面展示](./screenshot.jpg)  
 *(实际使用时请替换为真实截图)*  
 
 ## ✨ 特性亮点  
