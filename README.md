@@ -10,18 +10,45 @@
 - 🌍 **多平台适配** - 从手机到 4K 显示器完美呈现  
 - ⚡ **闪电加载** - 优化过的代码确保流畅体验  
 
-## 🛠️ 安装指南  
+## 🚀 一键部署
 
-### 本地使用  
+### Cloudflare Pages 部署
+
+[![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/pages/new/upload?url=https://github.com/yourusername/puretube)
+
+**部署步骤**:
+1. 点击上方按钮
+2. 登录您的Cloudflare账户
+3. 选择"连接到Git"并授权
+4. 选择您的仓库分支(main/master)
+5. 在构建设置中保持默认配置
+6. 点击"保存并部署"
+
+部署完成后，您将获得一个类似 `https://your-project.pages.dev` 的专属域名
+
+### 其他部署方式
+
+| 平台 | 部署按钮 | 备注 |
+|------|----------|------|
+| Vercel | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/puretube) | 适合边缘网络 |
+| Netlify | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/puretube) | 带CI/CD |
+| Render | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy) | 免费托管 |
+
+## 🛠️ 本地开发
+
 ```bash
+# 克隆仓库
 git clone https://github.com/yourusername/puretube.git
 cd puretube
-open index.html  # 或在文件管理器中双击
+
+# 启动本地服务器(需要Python)
+python3 -m http.server 8000
+
+# 或者在Node.js环境下
+npx serve
 ```
 
-### 网页部署  
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/puretube)  
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/puretube)  
+访问 `http://localhost:8000` 查看效果
 
 ## 🎮 使用说明  
 
