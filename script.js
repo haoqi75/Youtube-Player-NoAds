@@ -45,17 +45,21 @@ function playVideo() {
     // 显示加载状态
     videoInfoContent.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> 加载视频中...</p>';
     
-    // 发送播放指令到iframe
-    playerIframe.contentWindow.postMessage({
-        type: 'loadVideo',
-        videoId: videoId
-    }, '*');
+    // 两种方式确保播放：
+    // 方式1：通过URL参数传递视频ID
+    playerIframe.src = `player.html?videoId=${videoId}`;
+    
+    // 方式2：通过postMessage传递（作为备用）
+    setTimeout(() => {
+        playerIframe.contentWindow.postMessage({
+            type: 'loadVideo',
+            videoId: videoId
+        }, '*');
+    }, 1000);
     
     // 激活iframe显示
-    setTimeout(() => {
-        playerIframe.classList.add('active');
-        playerPlaceholder.style.display = 'none';
-    }, 500);
+    playerIframe.classList.add('active');
+    playerPlaceholder.style.display = 'none';
 }
 
 // 从URL提取视频ID
