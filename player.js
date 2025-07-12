@@ -96,13 +96,19 @@ class PureTubePlayer {
     }
     
     onPlayerReady(event) {
-        console.log('YouTube player ready');
-        this.player = event.target;
-        this.setVolume(this.lastVolume);
-        this.updateVideoInfo();
-        
-        // Start progress update loop
-        this.progressInterval = setInterval(() => this.updateProgress(), 1000);
+    console.log('YouTube player ready');
+    this.player = event.target;
+    this.setVolume(this.lastVolume);
+    
+    // 通知父页面播放器已准备就绪
+    this.postMessageToParent('playerReady', {});
+    
+    // 如果URL中有预加载的视频ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('videoId');
+    if (videoId) {
+        this.loadVideo(videoId);
+    }
     }
     
     onPlayerStateChange(event) {
@@ -312,13 +318,13 @@ class PureTubePlayer {
             resetTimer();
         });
     }
-    
-    loadVideo(videoId) {
-        if (!this.player) return;
-        
-        this.player.loadVideoById(videoId);
-        this.isPlaying = true;
-        this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    postMessageToParent(type, payload) {
+    if (window.parent) {
+        window.parent.postMessage({
+            type: type,
+            payload: payload
+        }, '*'); // 生产环境应替换为具体域名
+    }
     }
 }
 
