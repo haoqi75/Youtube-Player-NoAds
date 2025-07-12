@@ -9,6 +9,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+    <div style="text-align: center;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
+        <p style="margin-top: 20px;">播放器初始化中...</p>
+    </div>
+</div>
+
+<script>
+    // 移除加载覆盖层
+    function hideLoading() {
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+    
+    // 当YouTube API准备好时隐藏加载界面
+    window.onYouTubeIframeAPIReady = function() {
+        hideLoading();
+        // 保留原始API回调
+        if (window.originalOnYouTubeIframeAPIReady) {
+            window.originalOnYouTubeIframeAPIReady();
+        }
+    };
+    
+    // 5秒超时确保显示
+    setTimeout(hideLoading, 5000);
+        </script>
     <div class="puretube-player" id="player-container">
         <div class="player-overlay">
             <div class="top-controls">
