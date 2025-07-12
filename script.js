@@ -1,79 +1,29 @@
-// 播放器实例
-let player;
-let isMuted = false;
-let lastVolume = 50;
+// 播放器通信变量
+let playerIframe = document.getElementById('player-iframe');
+let playerPlaceholder = document.getElementById('playerPlaceholder');
+let videoInput = document.getElementById('videoUrl');
+let playBtn = document.getElementById('playBtn');
+let videoInfoContent = document.getElementById('videoInfoContent');
 
-// DOM 元素
-const videoInput = document.getElementById('videoUrl');
-const playBtn = document.getElementById('playBtn');
-const fullscreenBtn = document.getElementById('fullscreenBtn');
-const muteBtn = document.getElementById('muteBtn');
-const volumeSlider = document.getElementById('volumeSlider');
-const videoInfo = document.getElementById('videoInfo');
-const playerContainer = document.getElementById('player-container');
-const placeholder = document.querySelector('.placeholder');
-
-// 初始化播放器
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '100%',
-        width: '100%',
-        playerVars: {
-            'autoplay': 0,
-            'controls': 1,
-            'disablekb': 0,
-            'enablejsapi': 1,
-            'fs': 1,
-            'rel': 0,
-            'modestbranding': 1,
-            'iv_load_policy': 3,
-            'color': 'white',
-            'playsinline': 1
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+// 初始化播放器通信
+function initPlayer() {
+    // 监听来自播放器的消息
+    window.addEventListener('message', function(event) {
+        if (event.source !== playerIframe.contentWindow) return;
+        
+        const data = event.data;
+        switch(data.type) {
+            case 'ready':
+                console.log('播放器准备就绪');
+                break;
+            case 'videoInfo':
+                updateVideoInfo(data.payload);
+                break;
+            case 'error':
+                showError(data.message);
+                break;
         }
     });
-}
-
-// 播放器准备就绪
-function onPlayerReady(event) {
-    console.log('播放器准备就绪');
-    event.target.setVolume(lastVolume);
-    
-    // 设置初始音量滑块值
-    volumeSlider.value = lastVolume;
-    
-    // 添加事件监听器
-    playBtn.addEventListener('click', playVideo);
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-    muteBtn.addEventListener('click', toggleMute);
-    volumeSlider.addEventListener('input', changeVolume);
-    
-    // 添加键盘快捷键
-    document.addEventListener('keydown', handleKeyPress);
-}
-
-// 播放器状态变化
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-        // 视频开始播放时隐藏占位图
-        placeholder.style.display = 'none';
-        
-        // 获取视频信息
-        updateVideoInfo();
-    }
-}
-
-// 更新视频信息显示
-function updateVideoInfo() {
-    try {
-        const videoTitle = player.getVideoData().title;
-        videoInfo.innerHTML = `<i class="fas fa-info-circle"></i> 正在播放: ${videoTitle}`;
-    } catch (e) {
-        console.error('获取视频信息失败:', e);
-    }
 }
 
 // 播放视频
@@ -93,108 +43,51 @@ function playVideo() {
     }
     
     // 显示加载状态
-    videoInfo.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载视频中...';
-    placeholder.style.display = 'flex';
+    videoInfoContent.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> 加载视频中...</p>';
     
-    player.loadVideoById(videoId);
+    // 发送播放指令到iframe
+    playerIframe.contentWindow.postMessage({
+        type: 'loadVideo',
+        videoId: videoId
+    }, '*');
+    
+    // 激活iframe显示
+    setTimeout(() => {
+        playerIframe.classList.add('active');
+        playerPlaceholder.style.display = 'none';
+    }, 500);
 }
 
 // 从URL提取视频ID
 function extractVideoId(url) {
-    // 检查是否是视频ID格式
     if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
         return url;
     }
     
-    // 检查各种YouTube URL格式
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     
     return (match && match[2].length === 11) ? match[2] : null;
 }
 
-// 切换全屏
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        playerContainer.requestFullscreen?.() ||
-        playerContainer.webkitRequestFullscreen?.() ||
-        playerContainer.msRequestFullscreen?.();
-    } else {
-        document.exitFullscreen?.() ||
-        document.webkitExitFullscreen?.() ||
-        document.msExitFullscreen?.();
-    }
+// 更新视频信息
+function updateVideoInfo(info) {
+    let html = `
+        <p><strong>标题:</strong> ${info.title}</p>
+        <p><strong>作者:</strong> ${info.author}</p>
+        <p><strong>时长:</strong> ${formatTime(info.duration)}</p>
+    `;
+    videoInfoContent.innerHTML = html;
 }
 
-// 切换静音
-function toggleMute() {
-    if (isMuted) {
-        player.unMute();
-        player.setVolume(lastVolume);
-        volumeSlider.value = lastVolume;
-        muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-    } else {
-        lastVolume = player.getVolume();
-        player.mute();
-        volumeSlider.value = 0;
-        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-    }
-    
-    isMuted = !isMuted;
+// 格式化时间
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-// 改变音量
-function changeVolume() {
-    const volume = volumeSlider.value;
-    player.setVolume(volume);
-    
-    if (volume == 0) {
-        player.mute();
-        isMuted = true;
-        muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-    } else {
-        if (isMuted) {
-            player.unMute();
-            isMuted = false;
-            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        }
-        lastVolume = volume;
-    }
-}
-
-// 键盘快捷键
-function handleKeyPress(e) {
-    switch (e.key) {
-        case ' ':
-            // 空格键切换播放/暂停
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
-            break;
-        case 'f':
-        case 'F':
-            toggleFullscreen();
-            break;
-        case 'ArrowUp':
-            // 上箭头增加音量
-            const currentVol = player.getVolume();
-            const newVol = Math.min(currentVol + 10, 100);
-            player.setVolume(newVol);
-            volumeSlider.value = newVol;
-            break;
-        case 'ArrowDown':
-            // 下箭头减小音量
-            const currentVol2 = player.getVolume();
-            const newVol2 = Math.max(currentVol2 - 10, 0);
-            player.setVolume(newVol2);
-            volumeSlider.value = newVol2;
-            break;
-    }
-}
-
-// 显示错误信息
+// 显示错误
 function showError(message) {
     const errorEl = document.createElement('div');
     errorEl.className = 'error-message';
@@ -231,3 +124,14 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initPlayer();
+    
+    // 添加事件监听
+    playBtn.addEventListener('click', playVideo);
+    videoInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') playVideo();
+    });
+});
