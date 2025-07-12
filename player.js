@@ -274,6 +274,21 @@ class PureTubePlayer {
         }
     }
     
+    handleParentMessages() {
+    window.addEventListener('message', (event) => {
+        // 安全性检查
+        if (event.origin !== window.location.origin && 
+            !event.origin.includes('localhost') && 
+            !event.origin.startsWith('http://127.0.0.1')) {
+            return;
+        }
+
+        if (event.data.type === 'loadVideo' && this.player) {
+            this.loadVideo(event.data.videoId);
+        }
+    });
+}
+    
     handleKeyPress(e) {
         switch(e.key) {
             case ' ':
@@ -301,6 +316,27 @@ class PureTubePlayer {
                 break;
         }
     }
+    
+    loadVideo(videoId) {
+    if (!this.player) {
+        console.error('Player not initialized');
+        return;
+    }
+
+    this.player.loadVideoById({
+        videoId: videoId,
+        suggestedQuality: this.currentQuality
+    });
+    
+    // 更新URL保持状态
+    window.history.replaceState({}, '', `?videoId=${videoId}`);
+    
+    // 通知父页面视频已开始加载
+    this.postMessageToParent('videoLoading', { videoId });
+    
+    // 启动进度更新循环
+    this.progressInterval = setInterval(() => this.updateProgress(), 1000);
+}
     
     setupIdleTimer() {
         let idleTimer;

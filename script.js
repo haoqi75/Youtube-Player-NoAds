@@ -7,59 +7,58 @@ let videoInfoContent = document.getElementById('videoInfoContent');
 
 // 初始化播放器通信
 function initPlayer() {
-    // 监听来自播放器的消息
+    let apiReady = false;
+    let pendingVideoId = null;
+
     window.addEventListener('message', function(event) {
+        // 基本来源验证
         if (event.source !== playerIframe.contentWindow) return;
         
         const data = event.data;
         switch(data.type) {
-            case 'ready':
-                console.log('播放器准备就绪');
+            case 'apiReady':
+                apiReady = true;
+                console.log('YouTube API已就绪');
+                if (pendingVideoId) {
+                    loadVideoToIframe(pendingVideoId);
+                    pendingVideoId = null;
+                }
                 break;
+                
             case 'videoInfo':
                 updateVideoInfo(data.payload);
                 break;
+                
             case 'error':
                 showError(data.message);
                 break;
         }
     });
-}
 
-// 播放视频
-function playVideo() {
-    const videoInputValue = videoInput.value.trim();
-    
-    if (!videoInputValue) {
-        showError('请输入 YouTube 视频链接或ID');
-        return;
+    function loadVideoToIframe(videoId) {
+        // 方式1：通过URL参数
+        playerIframe.src = `player.html?videoId=${videoId}`;
+        
+        // 方式2：通过postMessage（备用）
+        setTimeout(() => {
+            playerIframe.contentWindow.postMessage({
+                type: 'loadVideo',
+                videoId: videoId
+            }, '*');
+        }, 500);
+        
+        playerIframe.classList.add('active');
+        playerPlaceholder.style.display = 'none';
     }
-    
-    const videoId = extractVideoId(videoInputValue);
-    
-    if (!videoId) {
-        showError('无效的 YouTube 视频链接或ID');
-        return;
-    }
-    
-    // 显示加载状态
-    videoInfoContent.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> 加载视频中...</p>';
-    
-    // 两种方式确保播放：
-    // 方式1：通过URL参数传递视频ID
-    playerIframe.src = `player.html?videoId=${videoId}`;
-    
-    // 方式2：通过postMessage传递（作为备用）
-    setTimeout(() => {
-        playerIframe.contentWindow.postMessage({
-            type: 'loadVideo',
-            videoId: videoId
-        }, '*');
-    }, 1000);
-    
-    // 激活iframe显示
-    playerIframe.classList.add('active');
-    playerPlaceholder.style.display = 'none';
+
+    window.loadVideo = function(videoId) {
+        if (apiReady) {
+            loadVideoToIframe(videoId);
+        } else {
+            pendingVideoId = videoId;
+            console.log('API未就绪，暂存视频ID');
+        }
+    };
 }
 
 // 从URL提取视频ID
@@ -128,6 +127,23 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+function playVideo() {
+    const videoInputValue = videoInput.value.trim();
+    if (!videoInputValue) {
+        showError('请输入 YouTube 视频链接或ID');
+        return;
+    }
+    
+    const videoId = extractVideoId(videoInputValue);
+    if (!videoId) {
+        showError('无效的 YouTube 视频链接或ID');
+        return;
+    }
+    
+    videoInfoContent.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> 加载视频中...</p>';
+    window.loadVideo(videoId);
+}
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {

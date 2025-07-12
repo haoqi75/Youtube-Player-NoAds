@@ -7,6 +7,27 @@
     <link rel="stylesheet" href="player.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+// 全局存储原始回调
+window.originalOnYouTubeIframeAPIReady = window.onYouTubeIframeAPIReady;
+
+// 新的API准备回调
+window.onYouTubeIframeAPIReady = function() {
+    console.log('YouTube API ready');
+    hideLoading();
+    if (window.originalOnYouTubeIframeAPIReady) {
+        window.originalOnYouTubeIframeAPIReady();
+    }
+    
+    // 通知父页面API已加载
+    if (window.parent) {
+        window.parent.postMessage({
+            type: 'apiReady',
+            status: true
+        }, '*');
+    }
+};
+</script>
 </head>
 <body>
     <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
