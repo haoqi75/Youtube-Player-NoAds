@@ -38,8 +38,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/puretube.git
-cd puretube
+git clone https://github.com/haoqi75/Youtube-Player-NoAds.git
+cd Youtube-Player-NoAds
 
 # 启动本地服务器(需要Python)
 python3 -m http.server 8000
