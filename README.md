@@ -1,55 +1,93 @@
-# 无广告 YouTube 播放器
+# 🎥 PureTube - 优雅的无广告 YouTube 播放器  
 
-这是一个简单的无广告 YouTube 视频播放器网页应用，使用 YouTube IFrame API 实现。
+![PureTube 界面展示](https://via.placeholder.com/800x500/1a1a1a/ffffff?text=PureTube+Player+Preview)  
+*(实际使用时请替换为真实截图)*  
 
-## 功能特点
+## ✨ 特性亮点  
 
-- 🚫 无广告播放 YouTube 视频
-- 🔍 支持通过视频链接或ID播放
-- 🔊 音量控制滑块
-- 🔇 静音/取消静音功能
-- 🖥️ 全屏模式
-- 📱 响应式设计，适配不同屏幕尺寸
-- 🛡️ 隐藏相关视频和注释
+- 🌈 **极简美学设计** - 精心调校的 UI 与动画效果  
+- 🚫 **广告拦截** - 通过智能参数屏蔽大部分广告  
+- 🎛️ **专业控制台** - 音量、画质、播放速度一键调节  
+- 🌍 **多平台适配** - 从手机到 4K 显示器完美呈现  
+- ⚡ **闪电加载** - 优化过的代码确保流畅体验  
 
-## 安装与使用
+## 🛠️ 安装指南  
 
-### 方法一：直接使用
+### 本地使用  
+```bash
+git clone https://github.com/yourusername/puretube.git
+cd puretube
+open index.html  # 或在文件管理器中双击
+```
 
-1. 下载项目文件
-2. 打开 `index.html` 文件即可使用
+### 网页部署  
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/puretube)  
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/puretube)  
 
-### 方法二：部署到网站
+## 🎮 使用说明  
 
-1. 将三个文件 (`index.html`, `styles.css`, `script.js`) 上传到您的网站服务器
-2. 访问对应的 URL 即可使用
+1. **粘贴链接** - 输入 YouTube URL 或视频 ID  
+   ```
+   支持格式:
+   - https://youtu.be/dQw4w9WgXcQ
+   - https://www.youtube.com/watch?v=dQw4w9WgXcQ
+   - 直接输入 dQw4w9WgXcQ
+   ```
 
-## 使用方法
+2. **高级控制**  
+   - `空格键` 播放/暂停  
+   - `F` 进入全屏  
+   - `↑↓箭头` 调节音量  
+   - `←→箭头` 前进/后退 5秒  
 
-1. 在输入框中粘贴 YouTube 视频链接或视频ID
-2. 点击"播放"按钮
-3. 使用下方的控制按钮调整音量、静音或切换全屏
+3. **画质选择**  
+   右键点击播放器可选择分辨率  
 
-## 技术细节
+## 🌈 主题定制  
 
-- 使用 YouTube IFrame API 嵌入播放器
-- 通过设置 `rel: 0` 和 `iv_load_policy: 3` 参数减少相关内容显示
-- 纯前端实现，无需后端服务器
+在 `styles.css` 中修改 CSS 变量即可换肤：  
+```css
+:root {
+  --primary-color: #ff4d4d;  /* 主色调 */
+  --bg-color: #121212;       /* 背景色 */
+  --text-color: #e0e0e0;    /* 文字色 */
+  --control-bg: rgba(30,30,30,0.7); /* 控制栏背景 */
+}
+```
 
-## 限制说明
+## 📊 技术架构  
 
-- 需要网络连接才能正常工作
-- 虽然减少了广告显示的可能性，但不能保证100%无广告
-- 某些视频可能因版权限制无法播放
+```mermaid
+graph TD
+    A[用户界面] --> B[YouTube IFrame API]
+    B --> C[播放器控制]
+    C --> D[广告屏蔽参数]
+    D --> E[优化播放]
+```
 
-## 截图预览
+## 🚧 已知限制  
 
-![播放器界面截图](screenshot.jpg)
+⚠️ 因 YouTube 政策限制：  
+- 部分版权视频可能无法播放  
+- 移动端全屏需要手势操作  
+- 4K 画质需要高级账号  
 
-## 许可证
+## 🤝 参与贡献  
 
-MIT License
+我们欢迎各种形式的贡献！  
+1. 提交 Issue 报告问题  
+2. Fork 项目并提交 PR  
+3. 帮助改进文档  
+4. 分享使用体验  
 
-## 贡献
+## 📜 开源协议  
 
-欢迎提交 issue 或 pull request 来改进本项目
+MIT License | © 2023 PureTube Contributors  
+
+---
+
+<div align="center">
+  <sub>用 ❤️ 制作 | 星星支持我们 ⭐</sub>
+</div>
+
+---
