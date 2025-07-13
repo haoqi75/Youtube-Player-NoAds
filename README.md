@@ -14,7 +14,7 @@
 
 ### Cloudflare Pages 部署
 
-[![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/pages/new/upload?url=https://github.com/yourusername/puretube)
+[![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/pages/new/upload?url=https://github.com/haoqi75/Youtube-Player-NoAds)
 
 **部署步骤**:
 1. 点击上方按钮
@@ -30,8 +30,8 @@
 
 | 平台 | 部署按钮 | 备注 |
 |------|----------|------|
-| Vercel | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/puretube) | 适合边缘网络 |
-| Netlify | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/puretube) | 带CI/CD |
+| Vercel | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/haoqi75/Youtube-Player-NoAds) | 适合边缘网络 |
+| Netlify | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/haoqi75/Youtube-Player-NoAds) | 带CI/CD |
 | Render | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy) | 免费托管 |
 
 ## 🛠️ 本地开发
